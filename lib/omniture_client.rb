@@ -9,7 +9,7 @@ class BasicReporter < OmnitureClient::Base; end
 
 module OmnitureClient
   class << self
-    attr_accessor :aliases, :base_url, :ssl_url, :suite, :version
+    attr_accessor :aliases, :base_url, :ssl_url, :suite, :version, :js_include, :account, :var_prefix
 
     def config(config_hash)
       config_hash.each do |key, val|

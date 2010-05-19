@@ -9,5 +9,9 @@ module OmnitureClient
     def omniture_url
       reporter.to_query 
     end
+    
+    def omniture_raw
+      reporter.to_raw
+    end
   end
 end

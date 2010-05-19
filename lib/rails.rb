@@ -21,15 +21,24 @@ module OmnitureClient
       def omniture_url
         ssl = :ssl if request.ssl? && OmnitureClient::ssl_url
         reporter.url(ssl)
-      end      
+      end   
+      
+      def omniture_js
+        ssl = :ssl if request.ssl? && OmnitureClient::ssl_url
+        reporter.js(ssl)
+      end   
+      
+      def omniture_raw
+        reporter.raw
+      end
 
       private
 
       def set_reporter
         @reporter ||= begin
           "#{controller_path.classify}Reporter".constantize.new(self)
-         rescue NameError
-           BasicReporter.new(self)
+         #rescue NameError
+         #  BasicReporter.new(self)
          end        
       end
 
