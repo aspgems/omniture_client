@@ -6,9 +6,10 @@ module OmnitureClient
     end
 
     module ClassMethods
-      def reports_to_omniture
+      def reports_to_omniture(options = {})
         include InstanceMethods
-        before_filter :set_reporter, :assign_flash_vars
+        before_filter :set_reporter, options
+        before_filter :assign_flash_vars, options
         attr_accessor :reporter
       end
     end
@@ -43,6 +44,7 @@ module OmnitureClient
       end
 
       def assign_flash_vars
+        reporter.class.clear_meta_vars unless omniture_flash.empty?
         omniture_flash.each do |name, value|
           reporter.add_var(name, value)
         end        
@@ -53,4 +55,4 @@ end
 
 ActionController::Base.send(:include, OmnitureClient::ActionControllerMethods) if defined?(ActionController::Base)
 
-OmnitureClient::config(YAML::load(File.open(File.join(RAILS_ROOT, 'config', 'omniture.yml')))[RAILS_ENV]) if File.exists?(File.join(RAILS_ROOT, 'config', 'omniture.yml'))
+OmnitureClient::config(YAML::load(File.open('config/omniture.yml'))[Rails.env]) if File.exists?('config/omniture.yml')

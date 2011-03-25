@@ -13,6 +13,15 @@ module OmnitureClient
         meta_var
       end
       
+      def clear_meta_vars
+        if @meta_vars.present?
+          @meta_vars.each do |var|
+            instance_eval("@#{var.name} = nil")
+          end
+          @meta_vars = []
+        end
+      end
+      
       def for_action(name, &block)
         RAILS_DEFAULT_LOGGER.info("name = #{name}")
         yield
@@ -47,6 +56,6 @@ module OmnitureClient
         value
       end
     end
-    
+
   end
 end
