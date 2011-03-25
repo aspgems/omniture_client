@@ -3,7 +3,7 @@ module OmnitureClient
     attr_accessor :report
 
     def omniture_js
-      reporter.to_js
+      reporter.to_js.html_safe
     end
 
     def omniture_url

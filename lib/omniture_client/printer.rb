@@ -8,8 +8,6 @@ module OmnitureClient
     end
     
     def js(ssl = false)
-      #suite = OmnitureClient::suite.is_a?(Array) ? OmnitureClient::suite.join(',') : OmnitureClient::suite
-      #base_url = ssl == :ssl ? OmnitureClient::ssl_url : OmnitureClient::base_url
       output = <<-JS
         <script type="text/javascript">
           var s_account = "#{OmnitureClient::account}";
