@@ -14,7 +14,7 @@ module OmnitureClient
         <script type="text/javascript">
           var s_account = "#{OmnitureClient::account}";
         </script>
-        <script type="text/javascript" src="#{ActionController::Base.relative_url_root}/javascripts/#{OmnitureClient::js_include}"></script>
+        <script type="text/javascript" src="/javascripts/#{OmnitureClient::js_include}"></script>
         <script type="text/javascript">
           #{js_vars}
           var s_code=s_tan.t(); if(s_code)document.write(s_code);
