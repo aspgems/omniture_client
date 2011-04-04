@@ -1,13 +1,19 @@
 module OmnitureClient
   class Base
     
+    DEFAULT_OPTIONS = { :delimiter => ',',
+                        :unique => nil,
+                        :expires_in => 0 }
+    
     class << self
       attr_reader :meta_vars
       @@controller = nil
       
-      def var(name, delimiter = ',', &block)
+      def var(name, options={}, &block)
+        options = DEFAULT_OPTIONS.merge(options)
+        
         @meta_vars ||= []
-        meta_var = instance_eval("@#{name} ||= OmnitureClient::MetaVar.new('#{name}', '#{delimiter}')")
+        meta_var = instance_eval("@#{name} ||= OmnitureClient::MetaVar.new('#{name}', '#{options[:delimiter]}', '#{options[:unique]}', #{options[:expires_in]})")
         meta_var.add_var(block)
         meta_vars << meta_var unless meta_vars.include?(meta_var)
         meta_var
