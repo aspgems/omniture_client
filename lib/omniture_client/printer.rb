@@ -16,6 +16,7 @@ module OmnitureClient
         <script type="text/javascript">
           #{js_vars}
           var s_code=s_tan.t(); if(s_code)document.write(s_code);
+          #{js_events.join("\n")}
         </script>
       JS
     end
