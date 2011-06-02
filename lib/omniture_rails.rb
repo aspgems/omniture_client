@@ -22,13 +22,13 @@ module OmnitureClient
       def omniture_url
         ssl = :ssl if request.ssl? && OmnitureClient::ssl_url
         reporter.url(ssl)
-      end   
-      
+      end
+
       def omniture_js
         ssl = :ssl if request.ssl? && OmnitureClient::ssl_url
         reporter.js(ssl)
-      end   
-      
+      end
+
       def omniture_raw
         reporter.raw
       end
@@ -38,21 +38,19 @@ module OmnitureClient
       def set_reporter
         @reporter ||= begin
           "#{controller_path.classify}Reporter".constantize.new(self)
-         #rescue NameError
-         #  BasicReporter.new(self)
-         end        
+         rescue NameError
+          BasicReporter.new(self)
+         end
       end
 
       def assign_flash_vars
         reporter.class.clear_meta_vars unless omniture_flash.empty?
         omniture_flash.each do |name, value|
           reporter.add_var(name, value)
-        end        
+        end
       end
     end
   end
 end
 
 ActionController::Base.send(:include, OmnitureClient::ActionControllerMethods) if defined?(ActionController::Base)
-
-# OmnitureClient::config(YAML::load(File.open('config/omniture.yml'))[Rails.env]) if File.exists?('config/omniture.yml')
