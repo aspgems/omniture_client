@@ -2,12 +2,10 @@ module OmnitureClient
   module Printer
 
     def url(ssl = false)
-      suite = OmnitureClient::suite.is_a?(Array) ? OmnitureClient::suite.join(',') : OmnitureClient::suite
-      base_url =  ssl == :ssl ? OmnitureClient::ssl_url : OmnitureClient::base_url
-      "#{base_url}/b/ss/#{suite}/#{OmnitureClient::version}/#{rand(9999999)}?#{query}"
+      "#{base_url(ssl)}/b/ss/#{suite}/#{OmnitureClient::version}/#{rand(9999999)}?#{query}"
     end
     
-    def js(ssl = false)
+    def js
       output = <<-JS
         <script type="text/javascript">
           var s_account = "#{OmnitureClient::account}";
@@ -19,6 +17,14 @@ module OmnitureClient
           #{js_events.join("\n")}
         </script>
       JS
+    end
+    
+    def no_js(ssl = false)
+      output = <<-HTML
+        <noscript>
+          <img src="#{base_url(ssl)}/b/ss/#{suite}/1/#{OmnitureClient::version}--NS/0" height="1" width="1" border="0" alt="" />
+        </noscript>
+      HTML
     end
     
     def raw
@@ -47,6 +53,14 @@ module OmnitureClient
     end
 
     private
+
+    def suite
+      OmnitureClient::suite.is_a?(Array) ? OmnitureClient::suite.join(',') : OmnitureClient::suite
+    end
+
+    def base_url(ssl)
+      ssl == :ssl ? OmnitureClient::ssl_url : OmnitureClient::base_url
+    end
 
     def var_to_query(var)
       "#{ CGI::escape(var.name) }=#{ CGI::escape(var.value) }" if var
