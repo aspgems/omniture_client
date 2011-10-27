@@ -15,7 +15,7 @@ module OmnitureClient
         <script type="text/javascript" src="/javascripts/#{OmnitureClient::js_include}"></script>
         <script type="text/javascript">
           #{js_vars}
-          var s_code=s_tan.t(); if(s_code)document.write(s_code);
+          var s_code=s.t(); if(s_code)document.write(s_code);
           #{js_events.join("\n")}
         </script>
       JS
