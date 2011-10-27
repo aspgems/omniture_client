@@ -25,8 +25,12 @@ module OmnitureClient
       end
 
       def omniture_js
+        reporter.js
+      end
+
+      def omniture_no_js
         ssl = :ssl if request.ssl? && OmnitureClient::ssl_url
-        reporter.js(ssl)
+        reporter.no_js(ssl)
       end
 
       def omniture_raw
