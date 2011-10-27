@@ -1,3 +1,4 @@
+require File.dirname(__FILE__) + '/class_level_inheritable_attributes'
 require File.dirname(__FILE__) + '/omniture_client/printer'
 require File.dirname(__FILE__) + '/omniture_client/base'
 require File.dirname(__FILE__) + '/omniture_client/var'

@@ -1,13 +1,14 @@
 module OmnitureClient
   class Base
+    include OmnitureClient::ClassLevelInheritableAttributes
 
+    inheritable_attributes :meta_vars, :js_events
+    
     DEFAULT_OPTIONS = { :delimiter => ',',
                         :unique => nil,
                         :expires_in => 0 }
 
     class << self
-      attr_reader :meta_vars, :js_events
-      @@controller = nil
 
       def var(name, options={}, &block)
         options = DEFAULT_OPTIONS.merge(options)
