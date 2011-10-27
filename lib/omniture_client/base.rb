@@ -63,7 +63,7 @@ module OmnitureClient
     end
 
     def js_events
-      self.class.js_events ||= []
+      self.class.js_events || []
     end
 
     def add_var(name, value)
