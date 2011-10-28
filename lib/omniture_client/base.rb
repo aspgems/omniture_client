@@ -2,7 +2,7 @@ module OmnitureClient
   class Base
     include OmnitureClient::ClassLevelInheritableAttributes
 
-    inheritable_attributes :meta_vars, :js_events
+    inheritable_attributes :meta_vars, :js_vars, :js_events
     
     DEFAULT_OPTIONS = { :delimiter => ',',
                         :unique => nil,
@@ -20,6 +20,11 @@ module OmnitureClient
         meta_var
       end
 
+      def js_var(&block)
+        @js_vars ||= []
+        @js_vars << yield
+      end
+      
       def event(&block)
         @js_events ||= []
         @js_events << yield
@@ -61,6 +66,10 @@ module OmnitureClient
         vars << meta_var.value(controller) if meta_var
         vars
       end
+    end
+
+    def js_vars
+      self.class.js_vars || []
     end
 
     def js_events

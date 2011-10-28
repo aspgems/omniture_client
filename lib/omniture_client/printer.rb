@@ -12,7 +12,8 @@ module OmnitureClient
         </script>
         <script type="text/javascript" src="/javascripts/#{OmnitureClient::js_include}"></script>
         <script type="text/javascript">
-          #{js_vars}
+          #{vars_to_js}
+          #{js_vars.join("\n")}
           var s_code=s.t(); if(s_code)document.write(s_code);
           #{js_events.join("\n")}
         </script>
@@ -38,7 +39,7 @@ module OmnitureClient
       end.join('&')
     end
     
-    def js_vars
+    def vars_to_js
       vars.inject([]) do |query, var|
         query << var_to_js(var) if var.value && var.value != ""
         query
