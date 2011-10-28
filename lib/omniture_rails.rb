@@ -41,10 +41,10 @@ module OmnitureClient
 
       def set_reporter
         @reporter ||= begin
-          "#{controller_path.classify}Reporter".constantize.new(self)
-         rescue NameError
+          self.class.name.sub('Controller', 'Reporter').constantize.new(self)
+        rescue NameError
           BasicReporter.new(self)
-         end
+        end
       end
 
       def assign_flash_vars
