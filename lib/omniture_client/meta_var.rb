@@ -27,7 +27,7 @@ module OmnitureClient
     end
 
     def return_var(scope, reporter)
-      Var.new(name, value_procs.map{ |p| p.is_a?(Symbol) ? reporter.eval_var(p) : scope.instance_eval(&p) }.flatten.uniq.join(delimiter))
+      Var.new(name, value_procs.map{ |p| p.is_a?(Symbol) ? reporter.eval_var(p) : scope.instance_eval(&p) }.flatten.compact.uniq.join(delimiter))
     end
 
   end
