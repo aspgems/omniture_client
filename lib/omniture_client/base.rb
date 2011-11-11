@@ -65,7 +65,7 @@ module OmnitureClient
     end
 
     def vars
-      if Object.const_defined?(OmnitureLogger) && controller.class.class_variable_defined?('@@omnilog')
+      if Object.const_defined?('OmnitureLogger') && controller.class.class_variable_defined?('@@omnilog')
         controller.class.omnilog.report(controller, 'vars', self)
       end
       meta_vars = self.class.meta_vars || []

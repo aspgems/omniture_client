@@ -6,7 +6,7 @@ module OmnitureClient
     end
 
     def js
-      if Object.const_defined?(OmnitureLogger) && controller.class.class_variable_defined?('@@omnilog')
+      if Object.const_defined?('OmnitureLogger') && controller.class.class_variable_defined?('@@omnilog')
         controller.class.omnilog.report(controller, 'js', self)
       end
       output = <<-JS
@@ -43,7 +43,7 @@ module OmnitureClient
     end
 
     def vars_to_js
-      if Object.const_defined?(OmnitureLogger) && controller.class.class_variable_defined?('@@omnilog')
+      if Object.const_defined?('OmnitureLogger') && controller.class.class_variable_defined?('@@omnilog')
         controller.class.omnilog.report(controller, 'vars_to_js', self)
       end
       vars.inject([]) do |query, var|
