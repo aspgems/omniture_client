@@ -10,6 +10,7 @@ module OmnitureClient
         include InstanceMethods
         before_filter :set_reporter, options
         before_filter :assign_flash_vars, options
+        after_filter :clean_flash_vars, options
         attr_accessor :reporter
       end
     end
@@ -25,6 +26,9 @@ module OmnitureClient
       end
 
       def omniture_js
+        if Object.const_defined?(OmnitureLogger) && controller.class.class_variable_defined?('@@omnilog')
+          controller.class.omnilog.report(controller, 'omniture_js')
+        end
         reporter.js
       end
 
@@ -48,10 +52,14 @@ module OmnitureClient
       end
 
       def assign_flash_vars
-        reporter.class.clear_meta_vars unless omniture_flash.empty?
+        reporter.class.clear_meta_vars unless omniture_flash.empty? || omniture_flash.delete(:keep_vars)
         omniture_flash.each do |name, value|
           reporter.add_var(name, value)
         end
+      end
+
+      def clean_flash_vars
+        session['flash'].delete(:omniture) if session['flash'] && omniture_flash.empty?
       end
     end
   end
