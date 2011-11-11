@@ -27,7 +27,7 @@ module OmnitureClient
 
       def omniture_js
         if Object.const_defined?('OmnitureLogger') && self.class.class_variable_defined?('@@omnilog')
-          omnilog.report(controller, 'omniture_js')
+          omnilog.report(self, 'omniture_js')
         end
         reporter.js
       end
