@@ -23,7 +23,8 @@ module OmnitureClient
       def inherited(subclass)
         @omniture_inheritable_attributes.each do |inheritable_attribute|
           instance_var = "@#{inheritable_attribute}"
-          subclass.instance_variable_set(instance_var, instance_variable_get(instance_var))
+          inherited_var = instance_variable_get(instance_var)
+          subclass.instance_variable_set(instance_var, inherited_var.nil? ? nil : inherited_var.clone)
         end
       end
     end
