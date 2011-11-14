@@ -1,6 +1,6 @@
 module OmnitureClient
   class MetaVar
-    attr_reader :name, :delimiter, :cache_key, :expires_in
+    attr_reader :name, :delimiter, :cache_key, :expires_in, :only, :except
     attr_accessor :value_procs
 
     def initialize(name, options = {})
@@ -9,6 +9,8 @@ module OmnitureClient
       @delimiter = options[:delimiter]
       @cache_key = "omniture/#{name}/#{options[:unique]}"
       @expires_in = options[:expires_in]
+      @only = Array(options[:only]).map(&:to_s).to_set if options[:only]
+      @except = Array(options[:except]).map(&:to_s).to_set if options[:except]
     end
 
     def add_var(value_proc)
@@ -27,7 +29,20 @@ module OmnitureClient
     end
 
     def return_var(scope, reporter)
-      Var.new(name, value_procs.map{ |p| p.is_a?(Symbol) ? reporter.eval_var(p) : scope.instance_eval(&p) }.flatten.compact.uniq.join(delimiter))
+      if (only && !only.include?(scope.action_name)) ||
+         (except && except.include?(scope.action_name))
+        Var.new(name, nil)
+      else
+        values = value_procs.map do |p|
+          p = [p] if p.is_a?(Symbol)
+          if p.is_a?(Array)
+            value = p.map{ |v| reporter.eval_var(v) }.compact.first
+          else
+            scope.instance_eval(&p)
+          end
+        end
+        Var.new(name, values.flatten.compact.uniq.join(delimiter))
+      end
     end
 
   end
