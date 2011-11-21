@@ -10,7 +10,7 @@ module OmnitureClient
 
     class << self
 
-      def var(name, options={}, &block)
+      def var(name, options = {}, &block)
         options = DEFAULT_OPTIONS.merge(options)
 
         @meta_vars ||= []
@@ -52,21 +52,38 @@ module OmnitureClient
 
     include Printer
 
-    attr_reader  :controller
-
-    @meta_vars = []
+    attr_reader  :controller, :instance_meta_vars
 
     def initialize(controller)
       @controller = controller
+      @instance_meta_vars = []
+    end
+
+    def instance_var(name, options = {}, &block)
+      options = DEFAULT_OPTIONS.merge(options)
+
+      meta_var = instance_eval("@#{name} ||= OmnitureClient::MetaVar.new(name, options)")
+      meta_var.add_var(block)
+      self.instance_meta_vars << meta_var unless instance_meta_vars.include?(meta_var)
+      meta_var
     end
 
     def printer
       @printer ||= Printer.new(self)
     end
 
+    def clear_instance_meta_vars
+      if instance_meta_vars.present?
+        instance_meta_vars.each do |var|
+          instance_eval("@#{var.name} = nil")
+        end
+        instance_meta_vars = []
+      end
+    end
+
     def vars
-      meta_vars = self.class.meta_vars || []
-      @vars ||= meta_vars.inject([]) do |vars, meta_var|
+      all_meta_vars = (self.class.meta_vars || []) + instance_meta_vars
+      @vars ||= all_meta_vars.inject([]) do |vars, meta_var|
         vars << meta_var.value(controller, self) if meta_var
         vars
       end
@@ -85,8 +102,8 @@ module OmnitureClient
       self.class.js_events || []
     end
 
-    def add_var(name, value)
-      self.class.var(name) do
+    def add_var(name, value, options = {})
+      self.instance_var(name, options) do
         value
       end
     end

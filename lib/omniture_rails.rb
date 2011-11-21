@@ -49,7 +49,7 @@ module OmnitureClient
       end
 
       def assign_flash_vars
-        reporter.class.clear_meta_vars unless omniture_flash.empty? || omniture_flash.delete(:keep_vars)
+        reporter.clear_instance_meta_vars unless omniture_flash.empty?
         omniture_flash.each do |name, value|
           reporter.add_var(name, value)
         end
